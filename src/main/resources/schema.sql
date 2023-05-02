@@ -1,4 +1,4 @@
-CREATE TABLE if NOT EXISTS beer
+create TABLE if NOT EXISTS beer
 (
     id             integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
     beer_name      varchar(255),
@@ -6,6 +6,14 @@ CREATE TABLE if NOT EXISTS beer
     upc            varchar (25),
     quantity_on_hand integer,
     price          decimal,
+    created_date   timestamp,
+    last_modified_date timestamp
+);
+
+create TABLE if NOT EXISTS customer
+(
+    id             integer NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    name      varchar(255),
     created_date   timestamp,
     last_modified_date timestamp
 );

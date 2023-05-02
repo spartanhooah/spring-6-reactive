@@ -1,6 +1,5 @@
 package net.frey.spring6reactive.domain;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,15 +13,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Beer {
+public class Customer {
     @Id
     private Integer id;
 
-    private String beerName;
-    private String beerStyle;
-    private String upc;
-    private Integer quantityOnHand;
-    private BigDecimal price;
+    private String name;
 
     @CreatedDate
     private LocalDateTime createdDate;

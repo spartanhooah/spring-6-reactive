@@ -19,10 +19,19 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	mapstructVersion = "1.5.3.Final"
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	implementation "org.mapstruct:mapstruct:$mapstructVersion"
+	annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -48,8 +57,14 @@ test {
 spotless {
 	java {
 		removeUnusedImports()
-		googleJavaFormat().aosp()
+		palantirJavaFormat()
 	}
+}
+
+compileJava {
+	options.compilerArgs += [
+		'-Amapstruct.defaultComponentModel=spring'
+	]
 }
 
 compileJava.dependsOn 'spotlessApply'
