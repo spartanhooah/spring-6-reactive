@@ -19,7 +19,7 @@ class BeerRepositoryTest extends Specification {
             .subscribe { println it }
     }
 
-    static def buildTestBeer() {
+    public static def buildTestBeer() {
         Beer.builder()
             .beerName("Space Dust")
             .beerStyle("IPA")

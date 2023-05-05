@@ -1,7 +1,5 @@
 package net.frey.spring6reactive.controller;
 
-import static org.springframework.http.ResponseEntity.ok;
-
 import lombok.RequiredArgsConstructor;
 import net.frey.spring6reactive.model.CustomerDTO;
 import net.frey.spring6reactive.service.CustomerService;
@@ -49,11 +47,13 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     Mono<ResponseEntity<Void>> updateCustomer(@PathVariable int id, @RequestBody @Validated CustomerDTO customer) {
-        return customerService.updateCustomer(id, customer).map(savedDto -> ok().build());
+        return customerService.updateCustomer(id, customer).map(savedDto -> ResponseEntity.noContent()
+                .build());
     }
 
     @PatchMapping("/{id}")
     Mono<ResponseEntity<Void>> patchCustomer(@PathVariable int id, @RequestBody @Validated CustomerDTO customer) {
-        return customerService.patchCustomer(id, customer).map(savedDto -> ok().build());
+        return customerService.patchCustomer(id, customer).map(savedDto -> ResponseEntity.ok()
+                .build());
     }
 }
