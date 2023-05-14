@@ -12,6 +12,7 @@ import spock.lang.Stepwise
 
 import static net.frey.spring6reactive.controller.BeerController.BEER_PATH
 import static net.frey.spring6reactive.repository.BeerRepositoryTest.buildTestBeer
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockOAuth2Login
 import static reactor.core.publisher.Mono.just
 
 @Stepwise
@@ -23,7 +24,9 @@ class BeerControllerTest extends Specification {
 
     def "list beers"() {
         expect:
-        client.get().uri(BEER_PATH)
+        client
+            .mutateWith(mockOAuth2Login())
+            .get().uri(BEER_PATH)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().valueEquals("Content-Type", "application/json")
@@ -32,7 +35,9 @@ class BeerControllerTest extends Specification {
 
     def "get by id"() {
         expect:
-        client.get().uri("$BEER_PATH/1")
+        client
+            .mutateWith(mockOAuth2Login())
+            .get().uri("$BEER_PATH/1")
             .exchange()
             .expectStatus().isOk()
             .expectHeader().valueEquals("Content-Type", "application/json")
@@ -41,7 +46,9 @@ class BeerControllerTest extends Specification {
 
     def "create a new beer"() {
         expect:
-        client.post().uri(BEER_PATH)
+        client
+            .mutateWith(mockOAuth2Login())
+            .post().uri(BEER_PATH)
             .body(just(buildTestBeer()), BeerDTO)
             .header("Content-Type", "application/json")
             .exchange()
@@ -51,7 +58,9 @@ class BeerControllerTest extends Specification {
 
     def "update a beer"() {
         expect:
-        client.put().uri("$BEER_PATH/1")
+        client
+            .mutateWith(mockOAuth2Login())
+            .put().uri("$BEER_PATH/1")
             .body(just(buildTestBeer()), BeerDTO)
             .exchange()
             .expectStatus().isNoContent()
@@ -63,7 +72,9 @@ class BeerControllerTest extends Specification {
         beer.beerName = ""
 
         expect:
-        client.post().uri(BEER_PATH)
+        client
+            .mutateWith(mockOAuth2Login())
+            .post().uri(BEER_PATH)
             .body(just(beer), BeerDTO)
             .header("Content-Type", "application/json")
             .exchange()
@@ -76,7 +87,9 @@ class BeerControllerTest extends Specification {
         beer.beerStyle = ""
 
         expect:
-        client.put().uri("$BEER_PATH/1")
+        client
+            .mutateWith(mockOAuth2Login())
+            .put().uri("$BEER_PATH/1")
             .body(just(beer), BeerDTO)
             .exchange()
             .expectStatus().isBadRequest()
@@ -84,14 +97,18 @@ class BeerControllerTest extends Specification {
 
     def "get by id but there's an error"() {
         expect:
-        client.get().uri("$BEER_PATH/999")
+        client
+            .mutateWith(mockOAuth2Login())
+            .get().uri("$BEER_PATH/999")
             .exchange()
             .expectStatus().isNotFound()
     }
 
     def "update a beer that doesn't exist"() {
         expect:
-        client.put().uri("$BEER_PATH/999")
+        client
+            .mutateWith(mockOAuth2Login())
+            .put().uri("$BEER_PATH/999")
             .body(just(buildTestBeer()), BeerDTO)
             .exchange()
             .expectStatus().isNotFound()
